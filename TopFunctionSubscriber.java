@@ -73,7 +73,7 @@ public class TopFunctionSubscriber {
     public static void main(String[] args) {
         // --- Get domain ID --- //
         int domainId = 0;
-        String intopic = ""
+        String intopic = "";
         if (args.length >= 1) {
             intopic = args[0];
         }
@@ -113,7 +113,7 @@ public class TopFunctionSubscriber {
     
     // -----------------------------------------------------------------------
     
-    private static void subscriberMain(int domainId, int sampleCount) {
+    private static void subscriberMain(String intopic, int domainId, int sampleCount) {
 
         DomainParticipant participant = null;
         Subscriber subscriber = null;

@@ -15,29 +15,34 @@ public class TopUtil {
             System.out.println(MemoryPercentUsed() + "%");
             System.out.println(GetHostName());
             System.out.println(CPUPercentUsed() + "%");
+            System.out.println(ProcessCount());
         }catch(Exception e)
         {
             System.out.println(e);
         }
     }
 
-    public static void CPUInfo() {
-   //  use /proc/stat to get the necessary info with scanner
-        BufferedReader br = null;
+    //Makes a call to ls to get the directory structure for subdirictories of /proc
+    //uses a regex to count the running processes by looking for pid numbers
+    public static int ProcessCount() {
+        String[] getpidstr =  new String[] {"bash", "-c", "ls /proc/*/ -d"};
+        int pidcount = 0;
+        Pattern pattern = Pattern.compile("/proc/(\\d+)/");
         try{
-            br = getStream(statPath);
-            String line = "";
-            while((line = br.readLine()) != null) {
-                System.out.println(line);
+            Runtime run = Runtime.getRuntime();
+            Process proc = run.exec(getpidstr);
+            BufferedReader in = new BufferedReader( new InputStreamReader( proc.getInputStream() ));
+            while(pattern.matcher(in.readLine()).find()) {
+                pidcount++;
             }
-        }catch(IOException ex) {
-            System.out.println("Something went wrong");
+        }catch (IOException e){
+            e.printStackTrace();
         }
-
-
+        return pidcount;
 
     }
 
+    //Collectes cpu info accorss all cpus using /proc/stat returns as a percentage of used capactiy
     public static float CPUPercentUsed() {
         BufferedReader br = null;
         int busy = 0;
@@ -45,11 +50,11 @@ public class TopUtil {
         try{
             br = getStream(statPath);
             String line = "";
+            //only use those lines starting with cpu can quit when they run out
             while((line = br.readLine()).startsWith("cpu")) {
                 String[] parts = line.split("\\s+");
-                //Get all the times for sum save idle separately
+                //Get all the times for sum save the active usage separately
                 for(int i = 1; i <= 4; i++) {
-                //    System.out.println(parts[i]);
                     int temp = Integer.parseInt(parts[i]);
                     if(i < 4){
                         busy += temp;
@@ -65,6 +70,8 @@ public class TopUtil {
         return 0.0f;
     }
 
+    //Collects information on memory usage from /proc/mieminfo and returns as percentage
+    //used.
     public static float MemoryPercentUsed() {
         BufferedReader br = null;
         try{
@@ -84,6 +91,7 @@ public class TopUtil {
     }
         
 
+    //Gets the hostname and returns it as a string
     public static String GetHostName() {
         String line = "";
         try{
@@ -101,19 +109,7 @@ public class TopUtil {
        // return "no worky";
     }
 
-    public static void MemoryInfo() {
-    // Zuse /proc/meminfo to get the memory usage using scnaner
-        BufferedReader br = null;
-        try{
-            br = getStream(meminfoPath);
-            String line = "";
-            while((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-        }catch(IOException ex) {
-            System.out.println("Something went wrong");
-        }
-    }
+    //Gets a stream of information from the pseudofile system /proc
     private static BufferedReader getStream(String inpath)
     {
         BufferedReader br = null;
@@ -127,7 +123,8 @@ public class TopUtil {
         }
         return br;
     }
-
+    
+    //Specific to get memory info from /proc/meminfo
     public static int getMemNumber(String str) {
         Pattern pattern = Pattern.compile("^\\w+.:\\s+(\\d+)\\s+\\w+$");
         Matcher matcher = pattern.matcher(str);
