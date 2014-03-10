@@ -249,6 +249,22 @@ public class TopFunctionSubscriber {
                     if (info.valid_data) {
                         System.out.println(
                             ((TopFunction)_dataSeq.get(i)).toString("Received",0));
+  /*                      System.out.println(
+                            "user: " + ((TopFunction)_dataSeq.get(i)).username);
+                        System.out.println(
+                            "hostname: " + ((TopFunction)_dataSeq.get(i)).hostname);
+                        System.out.println(
+                            "currentTime: " + ((TopFunction)_dataSeq.get(i)).currentTime);
+
+                        System.out.println(
+                            "cpuUsage: " + ((TopFunction)_dataSeq.get(i)).cpuUsage);
+                        System.out.println(
+                            "memUsage: " + ((TopFunction)_dataSeq.get(i)).memUsage);
+
+                        System.out.println(
+                            "processes: " + ((TopFunction)_dataSeq.get(i)).procNumber);
+
+*/
 
 
                     }

@@ -200,8 +200,12 @@ public class TopFunctionPublisher {
                 System.out.println("Writing TopFunction, count " + count);
 
                 /* Modify the instance to be written here */
-                
-            
+               instance.username = "Joshua Aldrich";
+               instance.hostname = TopUtil.GetHostName(); 
+               instance.currentTime = TopUtil.GetCurrentTime(); 
+               instance.cpuUsage = TopUtil.CPUPercentUsed();
+               instance.memUsage = TopUtil.MemoryPercentUsed();
+               instance.procNumber = TopUtil.ProcessCount();
                 /* Write data */
                 writer.write(instance, instance_handle);
                 try {

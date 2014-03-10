@@ -1,27 +1,38 @@
 import java.util.*;
 import java.io.*;
 import java.util.regex.*;
+import java.text.SimpleDateFormat;
 
 public class TopUtil {
 
    public static final String statPath = "/proc/stat";
    public static final String meminfoPath = "/proc/meminfo";
 
-   public static void main(String[] args) {
+/*   public static void main(String[] args) {
        //System.out.println("Hello, World");
        //CPUInfo();
        //MemoryInfo();
         try{
-            System.out.println(MemoryPercentUsed() + "%");
+             System.out.println(MemoryPercentUsed() + "%");
             System.out.println(GetHostName());
             System.out.println(CPUPercentUsed() + "%");
             System.out.println(ProcessCount());
-        }catch(Exception e)
+            System.out.println(GetCurrentTime());
+       }catch(Exception e)
         {
             System.out.println(e);
         }
     }
-
+*/
+    public static String GetCurrentTime() {
+        long epoch = System.currentTimeMillis();
+        Date time = new Date((long)epoch);
+        SimpleDateFormat dateform = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
+        dateform.setTimeZone(TimeZone.getDefault());
+        String formattedDate = dateform.format(time);
+        return formattedDate;
+        
+    }
     //Makes a call to ls to get the directory structure for subdirictories of /proc
     //uses a regex to count the running processes by looking for pid numbers
     public static int ProcessCount() {
